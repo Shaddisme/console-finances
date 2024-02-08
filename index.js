@@ -86,3 +86,51 @@ var finances = [
   ['Jan-2017', 138230],
   ['Feb-2017', 671099],
 ];
+
+// Total number of months
+var totalMonths = finances.length;
+// Net total amount of Profit/Losses over the entire period
+var netTotal = 0;
+for (var i = 0; i < finances.length; i++) {
+  netTotal += finances[i][1];
+}
+// Calculate the changes in Profit/Losses over the entire period
+var totalChange = 0;
+for (var i = 1; i < finances.length; i++) {
+  var currentProfitLoss = finances[i][1];
+  var previousProfitLoss = finances[i - 1][1];
+  var change = currentProfitLoss - previousProfitLoss;
+  totalChange += change;
+}
+// Average of the changes in Profit/Losses over the entire period
+var averageChange = (totalChange / (totalMonths - 1)).toFixed(2);
+// Greatest increase in Profit/Losses
+var greatestIncrease = finances.reduce(function(acc, curr) {
+  var profitLoss = curr[1];
+  if (profitLoss - acc.amount > 0) {
+    acc.amount = profitLoss - acc.amount;
+    acc.date = curr[0];
+  }
+  return acc;
+}, { amount: 0, date: '' });
+// Greatest decrease in Profit/Losses
+var greatestDecrease = finances.reduce(function(acc, curr) {
+  var profitLoss = curr[1];
+  if (profitLoss - acc.amount < 0) {
+    acc.amount = profitLoss - acc.amount;
+    acc.date = curr[0];
+  }
+  return acc;
+}, { amount: 0, date: '' });
+
+console.log('Total number of months:', totalMonths);
+console.log('Net total amount of Profit/Losses over the entire period:', netTotal);
+console.log('Average of the changes in Profit/Losses over the entire period:', averageChange);
+console.log('Greatest increase in Profit/Losses:', greatestIncrease.amount, 'on', greatestIncrease.date);
+console.log('Greatest decrease in Profit/Losses:', greatestDecrease.amount, 'on', greatestDecrease.date);
+// Display of results on the webpage
+document.getElementById('totalMonths').textContent = totalMonths;
+document.getElementById('netTotal').textContent = netTotal;
+document.getElementById('averageChange').textContent = averageChange;
+document.getElementById('greatestIncrease').textContent = greatestIncrease.amount + ' on ' + greatestIncrease.date;
+document.getElementById('greatestDecrease').textContent = greatestDecrease.amount + ' on ' + greatestDecrease.date;
